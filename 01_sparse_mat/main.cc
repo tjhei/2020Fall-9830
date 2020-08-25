@@ -2,22 +2,19 @@
 #include <fstream>
 #include <vector>
 
-/*
-tasks:
-- fix print_full()
-- test everything with a matrix with an empty row (use -1 as column index)
-- implement mat_vec_transposed
+/**
+ * A simple vector class the represents a vector of R^n.
  */
-
 class Vector
 {
 public:
-  Vector(int size=0)
+  std::vector<double> values;
+
+  explicit Vector(size_t size = 0)
   {
     values.resize(size);
   }
 
-  std::vector<double> values;
 
   void load(const char *filename)
   {
@@ -33,18 +30,22 @@ public:
 
   void print()
   {
-    for (int i=0; i<values.size(); ++i)
-      std::cout << values[i] << "\t";
-    std::cout << std::endl;
+    for (int i=0; i<static_cast<int>(values.size()); ++i)
+      std::cout << values[i] << '\n';
+    std::cout << std::flush;
   }
-
 };
 
 
-
+/**
+ * An n by n sparse matrix
+ */
 class SparseMatrix
 {
 public:
+  /**
+   * Compute the matrix-vector product: dest = A*src
+   */
   void mat_vec(Vector &dest, const Vector &src)
   {
     for (int i=0; i<n; ++i)
@@ -55,9 +56,12 @@ public:
       }
   }
 
+  /**
+   * Compute the transposed matrix-vector product: dest = A'*src
+   */
   void mat_vec_transposed(Vector &dest, const Vector &src)
   {
-
+    // TODO
   }
 
   void load(const char *filename)
@@ -99,6 +103,7 @@ public:
                     << values[idx] << std::endl;
       }
   }
+
   void print_full()
   {
     for (int r=0; r<n; ++r)
@@ -117,7 +122,6 @@ public:
       }
   }
 
-
   std::vector<double> values;
   std::vector<int> column_indices;
   std::vector<int> row_start;
@@ -126,25 +130,23 @@ public:
 
 
 
-
-
 int main()
 {
   Vector x;
-  Vector y(4);
   SparseMatrix mat;
 
   x.load("vector");
-  std::cout << "x:"<< std::endl;
+  std::cout << "x:" << std::endl;
   x.print();
 
   mat.load("matrix");
   std::cout << "A:" << std::endl;
   mat.print();
-  std::cout << "A: (something is wrong)" << std::endl;
+  std::cout << "A:" << std::endl;
   mat.print_full();
 
   std::cout << std::endl << "A*x" << std::endl;
+  Vector y(4);
   mat.mat_vec(y, x);
   y.print();
 
@@ -153,4 +155,3 @@ int main()
   mat.mat_vec_transposed(z, x);
   z.print();
 }
-
