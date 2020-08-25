@@ -106,6 +106,7 @@ public:
 
   void print_full()
   {
+    // Note: this function contains a bug. Find it and fix it!
     for (int r=0; r<n; ++r)
       {
         int idx = row_start[r];
