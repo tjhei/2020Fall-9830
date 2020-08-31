@@ -148,7 +148,7 @@ int main()
 
   std::cout << std::endl << "A*x" << std::endl;
   Vector y(4);
-  mat.mat_vec(y, x);
+  mat.mat_vec(y, x); // y = Ax
   y.print();
 
   std::cout << std::endl << "A'*x" << std::endl;
