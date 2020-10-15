@@ -4,3 +4,6 @@
 **/.*
 *.ninja
 *.cmake
+**/CMakeLists.txt.user
+**/main
+**/Makefile
