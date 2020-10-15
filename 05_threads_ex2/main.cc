@@ -6,16 +6,25 @@
 #include <math.h>
 #include <thread>
 
+/**
+ * A simple class representing a vector in the vector space R^n.
+ */
 class Vector
 {
 public:
-  Vector(int size = 0)
+  /**
+   * Constructor, initialize to given size with random entries
+   */
+  explicit Vector(int size = 0)
   {
     values.resize(size);
     for (int i = 0; i < size; ++i)
       values[i] = rand();
   }
 
+  /**
+   * Constructor, copy @p other.
+   */
   Vector(const Vector &other)
   {
     std::cout << "You are making a copy "
@@ -24,8 +33,9 @@ public:
     values = other.values;
   }
 
-  std::vector<double> values;
-
+  /**
+   * Print the entries of the vector to the screen.
+   */
   void print()
   {
     for (unsigned int i=0; i<values.size(); ++i)
@@ -33,6 +43,9 @@ public:
     std::cout << std::endl;
   }
 
+  /**
+   * Return the l2/euclidian norm
+   */
   double norm()
   {
     double tmp = 0.0;
@@ -41,9 +54,17 @@ public:
     return sqrtf(tmp);
 
   }
+
+  /**
+   * We store the elements of our vector here.
+   */
+  std::vector<double> values;
 };
 
 
+/**
+ * Do part of a vector addition
+ */
 void add(Vector &out,
          const Vector &in1,
          const Vector &in2,
@@ -60,38 +81,40 @@ int main()
   const int n_runs = 100;
   Vector x(size);
   Vector y(size);
-  Vector z(size);
 
   std::cout << "Running " << n_runs << " additions... " << std::endl;
 
-  // serial version
-  if (true)
-    {
-      for (int runs=0; runs<n_runs; ++runs)
-        add(z, x, y, 0, size);
+  bool run_serial = true;
 
-      std::cout << "Norm: " << z.norm() << std::endl;
+
+  // serial version
+  if (run_serial)
+    {
+      // repeatedly compute x = x+y
+      for (int runs=0; runs<n_runs; ++runs)
+        add(x, x, y, 0, size);
+
+      std::cout << "Norm: " << x.norm() << std::endl;
     }
 
   // parallel version
-
-  if (true)
+  if (!run_serial)
     {
       const int num_threads = std::thread::hardware_concurrency();
-      std::thread t[num_threads];
+      std::thread t[256]; // Likely big enough and fixed in size
       for (int runs=0; runs<n_runs; ++runs)
         {
           for (int i = 0; i < num_threads; ++i)
             {
-              unsigned int start = 0; // TODO
-              unsigned int end = size; // TODO
-              //      t[i] = std::thread(add, TODO);
+              //unsigned int start = // TODO
+              //unsigned int end =  // TODO
+              //      t[i] = std::thread(add, ??);
             }
 
           for (int i = 0; i < num_threads; ++i)
             t[i].join();
         }
-      std::cout << "Norm: " << z.norm() << std::endl;
+      std::cout << "Norm: " << x.norm() << std::endl;
     }
 
 }
